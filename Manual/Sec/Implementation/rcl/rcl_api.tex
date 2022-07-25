@@ -1,0 +1,34 @@
+\subsection{RCL Layer APIs}
+% - NOTE: -------------------------------------------------------------
+\subsubsection{WORKING: wait.h}
+Wait sets for waiting on messages/service requests and responses/timers to be ready.
+
+\textbf{1. \apiarg{rcl\_wait\_set\_init}{rcl\_wait\_set\_t * wait\_set,
+size\_t number\_of\_subscriptions,
+size\_t number\_of\_guard\_conditions,
+size\_t number\_of\_timers,
+size\_t number\_of\_clients,
+size\_t number\_of\_services,
+size\_t number\_of\_events,
+rcl\_context\_t * context,
+rcl\_allocator\_t allocator}}: Initialize a rcl wait set with space for items to be waited on. This function allocates space for the subscriptions and other wait-able entities that can be stored in the wait set. It also sets the allocator to the given allocator and initializes the pruned member to be false. The \texttt{wait\_set struct} should be allocated and initialized to \texttt{NULL}. If the \texttt{wait\_set} is allocated but the memory is uninitialized the behavior is undefined. Calling this function on a wait set that has already been initialized will result in an error. A wait set can be reinitialized if \api{rcl\_wait\_set\_fini~()} was called on it.
+
+\textbf{2. \apiarg{rcl\_wait\_set\_add\_subscription}{  rcl\_wait\_set\_t * wait\_set,
+const rcl\_subscription\_t * subscription,
+size\_t * index}}: Store a pointer to the given subscription in the next empty spot in the set. This function does not guarantee that the subscription is not already in the wait set. Also add the rmw representation to the underlying rmw array and increment the rmw array count.
+
+\textbf{3. \apiarg{rcl\_wait}{rcl\_wait\_set\_t * wait\_set, int64\_t timeout}}: Block until the wait set is ready or until the timeout has been exceeded. This function will collect the items in the \str{rcl\_wait\_set\_t} and pass them to the underlying \api{rmw\_wait~()} function. The items in the wait set will be either left untouched or set to \str{NULL} after this function returns. Items that are not NULL are ready, where ready means different things based on the type of the item. For subscriptions this means there may be messages that can be taken, or perhaps that the state of the subscriptions has changed, in which case \api{rcl\_take~()} may succeed but return with taken == false. For guard conditions this means the guard condition was triggered.
+
+
+
+
+
+
+
+
+% - NOTE: -------------------------------------------------------------
+\subsubsection{WORKING: graph.h}
+% - NOTE: -------------------------------------------------------------
+\subsubsection{WORKING: init.h}
+% - NOTE: -------------------------------------------------------------
+\subsubsection{WORKING: guard\_condition.h}

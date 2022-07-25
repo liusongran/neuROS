@@ -1,0 +1,45 @@
+% !TEX ROOT = ../Thesis.tex 
+%-
+%-> 中文摘要
+%-
+\chapter{摘\quad 要}\chaptermark{摘\quad 要}% 摘要标题
+% \setcounter{page}{1}% 开始页码
+% \pagenumbering{Roman}% 页码符号
+% 22p / 12p = 1.83
+\linespread{1.5}
+\zihao{-4}
+% \setlength{\baselineskip}{20pt}
+
+实时系统广泛应用于于航空航天、武器装备、汽车、工业控制、机器人、通信、医疗电子等安全关键应用领域。随着信息技术与人类生活的融合不断加深，实时系统已经成为计算机系统的重要发展方向之一。在实时系统中，任务往往需要互斥访问内存、I/O设备、网络端口等共享资源，操作系统需要设计一定的实时锁协议来确保任务互斥访问共享资源。为了满足系统实时性要求，并且充分利用实时系统的资源，需要实时锁协议，调度算法以及相应的可调度性分析技术相结合，对任务系统调度及资源共享问题进行整体性研究。同时，在多核实时系统中，软件必须要突破应用层级粗粒度并行的局限性，深度挖掘任务内部的细粒度并行特征，使得原本无法满足实时约束的应用软件在多核平台安全运行。OpenMP是高性能计算领域中经典的并行编程框架且众多主流多核嵌入式平台开放对OpenMP的支持，为嵌入式实时系统的并行软件设计与分析提供了绝佳的契机。基于这一背景，本文研究了在共享资源约束下的实时调度技术，本文的主要技术贡献可概括如下：
+
+\begin{itemize}
+    \item [（1）]研究了单核上有向图实时任务模型中的嵌套访问共享资源问题。开发了实时锁协议，提出了实时锁协议，并结合最早截止期优先调度策略设计了新的实时调度策略——EDF+N-ACP。并且，提出了针对此调度算法的可调度性分析技术。同时，本文推导出了此调度算法的加速因子，可以用于与其它算法的性能比较。由于实时任务有向图模型加上限制条件后可以推广至其他模型，因此本文中的所有结果均可直接应用于那这些更受限制的模型。
+    \item [（2）]研究了多处理器上的锁协议及并行实时任务调度问题，研究了自旋锁对共享资源请求的三种服务顺序，无序，先进先出顺序和固定优先级顺序。在三种服务顺序下，本文提出了对共享资源导致的实时任务阻塞时间的分析方法同时分析了任务系统的最坏响应时间。并且，提出了针对并行实时任务的可调度性分析技术。
+    \item [（3）]研究了多处理器上静态OpenMP并行程序分析问题，同时分析了一级私有缓存及二级共享缓存。由于在并行程序的循环时，数据访问指令可能在不同的循环迭代中访问相同的内存块，本文提出了将循环迭代作用域与抽象解释技术相结合的数据缓存分析技术。同时增加了OpenMP框架中循环调度语句对缓存行为的影响。并且基于程序分析结果给出了OpenMP程序适用的循环并行化方案。
+    \item [（4）]研究了带有自旋锁的OpenMP实时任务调度问题。在OpenMP程序分析的基础上，对OpenMP实时任务进行细粒度对的建模。通过静态分析OpenMP程序，计算出了OpenMP实时任务参数的安全界限。基于程序的资源模型，提出了针对共享资源导致的阻塞时间分析技术。同时，分析了带自旋锁的OpenMP任务的最坏响应时间，提出了针对OpenMP任务的可调度性分析技术。
+\end{itemize}
+
+综上，本文研究了实时系统中在共享资源约束下的实时锁协议及实时任务调度问题。同时研究了基于缓存分析的OpenMP程序分析问题，提出了共享资源约束下OpenMP实时任务的调度技术。本文的研究对实时系统的分析与设计及实时系统中并行程序的分析与设计具有一定的参考价值。
+
+\keywords{实时系统；多核处理器；可调度性分析；共享资源；OpenMP；实时锁协议；最坏响应时间分析；缓存分析}% 中文关键词
+%-
+%-> 英文摘要
+%-
+\chapter{Abstract}\chaptermark{Abstract}% 摘要标题
+
+Real-time systems are widely used in safety-critical applications such as aerospace, weaponry, automobiles, industrial control, robotics, communications, and medical electronics. As the integration of information technology and human life continues to deepen, real-time systems have become one of the important development directions of computer systems. In a real-time system, tasks often need to mutually exclusive access to shared resources such as memory, I/O devices, and network ports. The operating system needs to design a certain real-time lock protocol to ensure that tasks mutually exclusive access to shared resources. In order to meet the real-time requirements of the system and make full use of the resources of the real-time system, it is necessary to combine the real-time lock protocol, scheduling algorithm, and corresponding schedulability analysis technology to conduct overall research on task system scheduling and resource sharing. At the same time, in a multi-core real-time system, the software must break through the limitations of application-level coarse-grained parallelism, and drill down to the fine-grained parallel features within tasks, so that application software that cannot meet real-time constraints can run safely on a multi-core platform. OpenMP is a classic parallel programming framework in the field of high-performance computing, and many mainstream multi-core embedded platforms open to support OpenMP, providing an excellent opportunity for parallel software design and analysis of embedded real-time systems. Based on this background, this paper studies the real-time scheduling technology under the constraints of shared resources. The main contributions of this paper can be summarized as follows:
+
+\begin{itemize}
+    \item [(1)] The problem of nested access to shared resources in the real-time task model of directed graphs on a single core is studied. Developed the real-time lock protocol, proposed the real-time lock protocol, and designed a new real-time scheduling strategy—EDF+N-ACP based on the earliest deadline priority scheduling strategy. In addition, a schedulability analysis technique for this scheduling algorithm is proposed. At the same time, this article deduces the acceleration factor of this scheduling algorithm, which can be used to compare the performance of other algorithms. Since the real-time task directed graph model can be extended to other models with restrictions, all the results in this article can be directly applied to these more restricted models.
+    
+    \item [(2)] The lock protocol and parallel real-time task scheduling on multi-processors are studied, and the three service orders of spin locks for shared resource requests, disorder, first-in first-out order and fixed priority order are studied. Under the three service sequences, this paper proposes an analysis method for the blocking time of real-time tasks caused by shared resources and analyzes the worst response time of the task system. In addition, a schedulability analysis technique for parallel real-time tasks is proposed.
+    
+    \item [(3)] The analysis of static OpenMP parallel programs on multi-processors is studied, and the first-level private cache and the second-level shared cache are also analyzed. Because in the loop of a parallel program, data access instructions may access the same memory block in different loop iterations, this paper proposes a data cache analysis technology that combines loop iteration scope with abstract interpretation technology. At the same time, the impact of the circular scheduling statement in the OpenMP framework on the cache behavior is increased. And based on the results of program analysis, a suitable loop parallelization scheme for OpenMP programs is given.
+    
+    \item [(4)] The OpenMP real-time task scheduling problem with spin lock is studied. On the basis of OpenMP program analysis, the OpenMP real-time task is modeled fine-grained. Through static analysis of the OpenMP program, the safety limits of the OpenMP real-time task parameters are calculated. Based on the resource model of the program, an analysis technique for blocking time caused by shared resources is proposed. At the same time, the worst response time of OpenMP tasks with spin locks is analyzed, and a schedulability analysis technique for OpenMP tasks is proposed.
+\end{itemize}
+
+In summary, this dissertation studies the real-time lock protocol and real-time task scheduling under the constraints of shared resources in real-time systems. Meanwhile, the OpenMP program analysis problem based on cache analysis is studied, and the scheduling technology of OpenMP real-time tasks under the constraint of shared resources is proposed. The results of this dissertation serve as theoretical foundations as well as provides insights for design and analysis real-time system and parallel programs.
+
+
+\englishkeywords{Real-time system; multi-core processor; schedulability analysis; shared resources; OpenMP; real-time locking protocol; worst-case response time analysis; cache analysis}
