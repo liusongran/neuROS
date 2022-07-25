@@ -26,11 +26,11 @@ Prototype Real-time Operating System for [UPDATE]() based on [micro-ROS project]
 
 Comparison of Execution Management:
 
-<img src="/Users/liusongran/MyProject/neuROS/Image/backg_execution.jpg" alt="backg_execution" style="zoom:33%;" />
+<img src="./Image/backg_execution.jpg" alt="backg_execution" style="zoom:33%;" />
 
 Execution Management mapped to fixed periodic scheduling scheme:
 
-<img src="/Users/liusongran/MyProject/neuROS/Image/design_execution.jpg" alt="design_execution" style="zoom:40%;" />
+<img src="./Image/design_execution.jpg" alt="design_execution" style="zoom:40%;" />
 
 The data is received via the defined transport interrupt service routine. The middleware function running in a high-frequency task unpacks the data into XRCE DDS message. The executor function running in the same or slightly lower frequency task takes the incoming XRCE DDS message and will make it available for the corresponding callback. The callback function is not invoked immediately, but is executed in tasks often at lower frequency than executor. Therefore, from the application perspective, it must be ensured that these functions run into completion within the respective assigned period.
 
