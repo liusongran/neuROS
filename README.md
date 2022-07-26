@@ -43,7 +43,7 @@ The data is received via the defined transport interrupt service routine. The mi
 Basic idea is to map ROS callback (or callback group) into FreeRTOS task, so that RTOS scheduler can explicitly schedule callback execution.
 
 #### a. Design
-<img src="./Image/design_execution1.pdf" alt="design_execution1" style="zoom:33%;" />
+<img src="./Image/design_execution1.jpg" alt="design_execution1" style="zoom:85%;" />
 
 #### b. Implementation
 
