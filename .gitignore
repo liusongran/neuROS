@@ -47,6 +47,10 @@
 *.mod*
 *.cmd
 
+
+*.check_cache
+*.log
+
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
