@@ -110,14 +110,11 @@ void task2_task(void *pvParameters){
 	}
 }
 
-int main(void)
-{
+int main(void){
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
   /* Configure the system clock */
   SystemClock_Config();
-
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
@@ -126,23 +123,19 @@ int main(void)
 
   /* Init scheduler */
   osKernelInitialize();
-
   /* creation of defaultTask */
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
-
   /* Start scheduler */
   osKernelStart();
 
   while (1);
-
 }
 
 /**
   * @brief System Clock Configuration
   * @retval None
   */
-void SystemClock_Config(void)
-{
+void SystemClock_Config(void){
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
@@ -188,16 +181,7 @@ void SystemClock_Config(void)
   * @param None
   * @retval None
   */
-static void MX_UART4_Init(void)
-{
-
-  /* USER CODE BEGIN UART4_Init 0 */
-
-  /* USER CODE END UART4_Init 0 */
-
-  /* USER CODE BEGIN UART4_Init 1 */
-
-  /* USER CODE END UART4_Init 1 */
+static void MX_UART4_Init(void){
   huart4.Instance = UART4;
   huart4.Init.BaudRate = 115200;
   huart4.Init.WordLength = UART_WORDLENGTH_8B;
@@ -210,10 +194,6 @@ static void MX_UART4_Init(void)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN UART4_Init 2 */
-
-  /* USER CODE END UART4_Init 2 */
-
 }
 
 /**
@@ -221,16 +201,7 @@ static void MX_UART4_Init(void)
   * @param None
   * @retval None
   */
-static void MX_USART3_UART_Init(void)
-{
-
-  /* USER CODE BEGIN USART3_Init 0 */
-
-  /* USER CODE END USART3_Init 0 */
-
-  /* USER CODE BEGIN USART3_Init 1 */
-
-  /* USER CODE END USART3_Init 1 */
+static void MX_USART3_UART_Init(void){
   huart3.Instance = USART3;
   huart3.Init.BaudRate = 115200;
   huart3.Init.WordLength = UART_WORDLENGTH_8B;
@@ -243,18 +214,12 @@ static void MX_USART3_UART_Init(void)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN USART3_Init 2 */
-
-  /* USER CODE END USART3_Init 2 */
-
 }
 
 /**
   * Enable DMA controller clock
   */
-static void MX_DMA_Init(void)
-{
-
+static void MX_DMA_Init(void){
   /* DMA controller clock enable */
   __HAL_RCC_DMA1_CLK_ENABLE();
 
@@ -265,7 +230,6 @@ static void MX_DMA_Init(void)
   /* DMA1_Stream3_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
-
 }
 
 /**
@@ -273,8 +237,7 @@ static void MX_DMA_Init(void)
   * @param None
   * @retval None
   */
-static void MX_GPIO_Init(void)
-{
+static void MX_GPIO_Init(void){
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
@@ -330,20 +293,14 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(USB_VBUS_GPIO_Port, &GPIO_InitStruct);
-
 }
 
-/* USER CODE BEGIN 4 */
 
-/* USER CODE END 4 */
-
-/* USER CODE BEGIN Header_StartDefaultTask */
-/**
+/** MARK:
   * @brief  Function implementing the defaultTask thread.
   * @param  argument: Not used
   * @retval None
   */
-/* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void *argument) {
   // Infinite loop
   HAL_GPIO_WritePin(GPIOG, GPIO_PIN_6, GPIO_PIN_SET);
@@ -375,31 +332,9 @@ void StartDefaultTask(void *argument) {
   printf(ptrTaskList);
   printf("**********************************\n");
   while (1) {
-	  HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_RESET);
-	  osDelay(1000);
+    HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_RESET);
+    osDelay(1000);
   }
-  //vTaskDelete(defaultTaskHandle);//删除开始任务
-  /*
-  TaskHandle_t xHandle;
-  xHandle = xTaskGetHandle("microROS_app");
-
-  while (1) {
-    if (eTaskGetState(xHandle) != eSuspended ) {
-      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_RESET);
-      osDelay(100);
-      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET);
-      osDelay(100);
-      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_RESET);
-      osDelay(150);
-      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET);
-      osDelay(500);
-    } else {
-      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_RESET);
-      osDelay(1000);
-      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET);
-      osDelay(1000);
-    }
-  }*/
 /*
 	printf("\nStartDefaultTask!\n");
 	//创建TASK1任务
@@ -433,23 +368,13 @@ void StartDefaultTask(void *argument) {
   * @brief  This function is executed in case of error occurrence.
   * @retval None
   */
-void Error_Handler(void)
-{
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
+void Error_Handler(void){
   __disable_irq();
-  while (1)
-  {
-  }
-  /* USER CODE END Error_Handler_Debug */
+  while (1);
 }
 
-PUTCHAR_PROTOTYPE
-{
-  /* Place your implementation of fputc here */
-  /* e.g. write a character to the USART1 and Loop until the end of transmission */
+PUTCHAR_PROTOTYPE{
+  /* e.g. write a character to the USART3 and Loop until the end of transmission */
   HAL_UART_Transmit(&huart3, (uint8_t *)&ch, 1, 0xFFFF);
-
   return ch;
 }
-

@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "stm32f4xx_hal.h": "c",
+        "error_handling.h": "c",
+        "allocator.h": "c",
+        "rcutils_ret.h": "c",
+        "macros.h": "c",
+        "node.h": "c"
+    }
+}

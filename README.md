@@ -4,13 +4,29 @@ Prototype Real-time Operating System for [UPDATE]() based on [micro-ROS project]
 ## TODO List
 
 ### To Liu
-- [ ] |07/26|-> execution design|: add an example to show current callback execution logic
-- [ ] |07/26|-> execution design|: explain neuROS execution logic in detail
-- [ ] |07/26|-> execution design|: detail code implementation plan and test method
+- [ ] |08/22|-> ITAM design|: design proposal of ITAM in neuROS (may be compatible with `session` and `stream`)
+
+- [ ] |08/21|-> ITAM design|: current memory management in mico-ros (`session` and `stream`)
+
+  ---
+
+- [x] |07/26|-> execution design|: add an example to show current callback execution logic
+
+- [x] |07/26|-> execution design|: explain neuROS execution logic in detail
+
+- [x] |07/26|-> execution design|: detail code implementation plan and test method
 
 ### To Zilong
-- [ ] |07/26-08/02|-> execution impl.|: master-slaver execution pattern implemented on FreeRTOS
-- [ ] |07/26-08/02|-> micro-ROS workflow manual|: figure out workflow of rclc executor, and markdown it.
+
+- [ ] |08/21-08/24|-> platform environment|: micro-ros and ROS2 communication
+
+- [ ] |08/21-08/24|-> execution impl.|: master-slaver execution pattern in `[my_neuROS]` project
+
+  ---
+
+- [x] |07/26-08/02|-> execution impl.|: master-slaver execution pattern implemented on FreeRTOS
+
+- [x] |07/26-08/02|-> micro-ROS workflow manual|: figure out workflow of rclc executor, and markdown it.
 
 ## Design Goals
 1. **Workload management:** mapping event-based execution model in micro-ROS to fixed periodic scheduling scheme( in AUTOSAR) or server-based scheduling
