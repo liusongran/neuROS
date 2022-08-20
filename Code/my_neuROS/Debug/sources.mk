@@ -29,6 +29,7 @@ Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 \
 Middlewares/Third_Party/FreeRTOS/Source \
 Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F \
 Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang \
+Middlewares/comm/itam \
 Middlewares/eProsima/Micro-CDR/src/c \
 Middlewares/eProsima/Micro-CDR/src/c/types \
 Middlewares/eProsima/Micro-XRCE-DDS-Client/src/c/core/log \
