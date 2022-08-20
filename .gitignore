@@ -50,6 +50,7 @@
 
 *.check_cache
 *.log
+*.DS_Store
 
 CMakeLists.txt.user
 CMakeCache.txt
