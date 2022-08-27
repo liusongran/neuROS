@@ -1805,14 +1805,15 @@ rclc_executor_spin_some(rclc_executor_t * executor, const uint64_t timeout_ns)
   RCL_CHECK_ARGUMENT_FOR_NULL(executor, RCL_RET_INVALID_ARGUMENT);
   RCUTILS_LOG_DEBUG_NAMED(ROS_PACKAGE_NAME, "spin_some");
 
+  // STEP1: context check
   if (!rcl_context_is_valid(executor->context)) {
     PRINT_RCLC_ERROR(rclc_executor_spin_some, rcl_context_not_valid);
     return RCL_RET_ERROR;
   }
-
+  // STEP2: executor prepare
   rclc_executor_prepare(executor);
 
-  // set rmw fields to NULL
+  // STEP3: set rmw fields to NULL
   rc = rcl_wait_set_clear(&executor->wait_set);
   if (rc != RCL_RET_OK) {
     PRINT_RCLC_ERROR(rclc_executor_spin_some, rcl_wait_set_clear);
@@ -1820,7 +1821,7 @@ rclc_executor_spin_some(rclc_executor_t * executor, const uint64_t timeout_ns)
   }
 
   // (jst3si) put in a sub-function - for improved readability
-  // add handles to wait_set
+  // STEP4: add handles to wait_set
   for (size_t i = 0; (i < executor->max_handles && executor->handles[i].initialized); i++) {
     RCUTILS_LOG_DEBUG_NAMED(ROS_PACKAGE_NAME, "wait_set_add_* %d", executor->handles[i].type);
     switch (executor->handles[i].type) {
@@ -1949,12 +1950,11 @@ rclc_executor_spin_some(rclc_executor_t * executor, const uint64_t timeout_ns)
     }
   }
 
-  // wait up to 'timeout_ns' to receive notification about which handles reveived
-  // new data from DDS queue.
+  // STEP5: wait up to 'timeout_ns' to receive notification about which handles received new data from DDS queue.
   rc = rcl_wait(&executor->wait_set, timeout_ns);
   RCLC_UNUSED(rc);
 
-  // based on semantics process input data
+  // STEP6: based on semantics process input data
   switch (executor->data_comm_semantics) {
     case LET:
       rc = _rclc_let_scheduling(executor);

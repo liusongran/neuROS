@@ -23,8 +23,10 @@ const rosidl_message_type_support_t * get_message_typesupport_handle(
 {
   assert(handle);
   assert(handle->func);
+  /*
   rosidl_message_typesupport_handle_function func =
     (rosidl_message_typesupport_handle_function)(handle->func);
+  */
   return func(handle, identifier);
 }
 

@@ -305,11 +305,12 @@ rmw_init(
     &context_impl->session,
     context_impl->output_best_effort_stream_buffer, context_impl->transport.comm.mtu);
 
+  // -- For test, by srliu.
   if (!uxr_create_session(&context_impl->session)) {
-    CLOSE_TRANSPORT(&context_impl->transport);
-    put_memory(&session_memory, &context_impl->mem);
-    context->impl = NULL;
-    RMW_UROS_TRACE_MESSAGE("failed to create node session on Micro ROS Agent.")
+    //CLOSE_TRANSPORT(&context_impl->transport);
+    //put_memory(&session_memory, &context_impl->mem);
+    //context->impl = NULL;
+    //RMW_UROS_TRACE_MESSAGE("failed to create node session on Micro ROS Agent.")
     return RMW_RET_ERROR;
   }
 

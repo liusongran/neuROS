@@ -114,6 +114,7 @@ rmw_create_subscription(
         type_support, ROSIDL_TYPESUPPORT_MICROXRCEDDS_CPP__IDENTIFIER_VALUE);
     }
 #endif /* ifdef ROSIDL_TYPESUPPORT_MICROXRCEDDS_CPP__IDENTIFIER_VALUE */
+    /**
     if (NULL == type_support_xrce) {
       RMW_UROS_TRACE_MESSAGE("Undefined type support")
       goto fail;
@@ -125,7 +126,7 @@ rmw_create_subscription(
     if (custom_subscription->type_support_callbacks == NULL) {
       RMW_UROS_TRACE_MESSAGE("type support data is NULL")
       goto fail;
-    }
+    }*/
 
     // Create topic
     custom_subscription->topic = create_topic(

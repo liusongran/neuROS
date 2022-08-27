@@ -32,7 +32,7 @@ bool run_xrce_session(
   int timeout)
 {
   if (target_stream->type == UXR_BEST_EFFORT_STREAM) {
-    uxr_flash_output_streams(&context->session);
+    //uxr_flash_output_streams(&context->session);	//For test, by srliu.
   } else {
     // This only handles one request at time
     uint8_t status;

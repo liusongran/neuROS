@@ -38,7 +38,6 @@
 "./Middlewares/Third_Party/FreeRTOS/Source/timers.o"
 "./Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o"
 "./Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.o"
-"./Middlewares/comm/itam/itam_memory_pool.o"
 "./Middlewares/eProsima/Micro-CDR/src/c/common.o"
 "./Middlewares/eProsima/Micro-CDR/src/c/types/array.o"
 "./Middlewares/eProsima/Micro-CDR/src/c/types/basic.o"

@@ -5,6 +5,14 @@
         "allocator.h": "c",
         "rcutils_ret.h": "c",
         "macros.h": "c",
-        "node.h": "c"
-    }
+        "node.h": "c",
+        "array": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "ranges": "c",
+        "utility": "c"
+    },
+    "cSpell.words": [
+        "itam"
+    ]
 }

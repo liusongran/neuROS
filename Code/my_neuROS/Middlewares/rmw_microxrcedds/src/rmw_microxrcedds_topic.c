@@ -69,7 +69,7 @@ create_topic(
     custom_node->participant_id, rmw_uxrce_entity_naming_buffer, UXR_REPLACE | UXR_REUSE);
 #else
   static char full_topic_name[RMW_UXRCE_TOPIC_NAME_MAX_LENGTH];
-  static char type_name[RMW_UXRCE_TYPE_NAME_MAX_LENGTH];
+  char type_name[RMW_UXRCE_TYPE_NAME_MAX_LENGTH];
 
   if (!generate_topic_name(topic_name, full_topic_name, sizeof(full_topic_name))) {
     RMW_UROS_TRACE_MESSAGE("Error creating topic name");
@@ -78,12 +78,18 @@ create_topic(
     goto fail;
   }
 
+  /**
   if (!generate_type_name(message_type_support_callbacks, type_name, sizeof(type_name))) {
     RMW_UROS_TRACE_MESSAGE("Error creating type name");
     rmw_uxrce_fini_topic_memory(custom_topic);
     custom_topic = NULL;
     goto fail;
-  }
+  }*/
+  type_name[0] = 's';
+  type_name[1] = 'r';
+  type_name[2] = 'L';
+  type_name[3] = 'i';
+  type_name[4] = 'u';
 
   topic_req = uxr_buffer_create_topic_bin(
     &custom_node->context->session,

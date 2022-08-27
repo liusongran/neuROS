@@ -73,27 +73,26 @@ bool rmw_uxrce_wait_mutex_initialized = false;
 #endif  // UCLIENT_PROFILE_MULTITHREAD
 
 // Memory init functions
-
-#define RMW_INIT_MEMORY(X) \
-  void rmw_uxrce_init_ ## X ## _memory( \
-    rmw_uxrce_mempool_t * memory, \
-    rmw_uxrce_ ## X ## _t * array, \
-    size_t size) \
-  { \
-    if (size > 0 && !memory->is_initialized) { \
-      UXR_INIT_LOCK(&memory->mutex); \
-      memory->is_initialized = true; \
-      memory->element_size = sizeof(*array); \
-      memory->allocateditems = NULL; \
-      memory->freeitems = NULL; \
-      memory->is_dynamic_allowed = true; \
- \
-      for (size_t i = 0; i < size; i++) { \
-        put_memory(memory, &array[i].mem); \
-        array[i].mem.data = (void *)&array[i]; \
+#define RMW_INIT_MEMORY(X)                      \
+  void rmw_uxrce_init_ ## X ## _memory(         \
+    rmw_uxrce_mempool_t * memory,               \
+    rmw_uxrce_ ## X ## _t * array,              \
+    size_t size)                                \
+  {                                             \
+    if (size > 0 && !memory->is_initialized) {  \
+      UXR_INIT_LOCK(&memory->mutex);            \
+      memory->is_initialized = true;            \
+      memory->element_size = sizeof(*array);    \
+      memory->allocateditems = NULL;            \
+      memory->freeitems = NULL;                 \
+      memory->is_dynamic_allowed = true;        \
+                                                \
+      for (size_t i = 0; i < size; i++) {       \
+        put_memory(memory, &array[i].mem);      \
+        array[i].mem.data = (void *)&array[i];  \
         array[i].mem.is_dynamic_memory = false; \
-      } \
-    } \
+      }                                         \
+    }                                           \
   }
 
 

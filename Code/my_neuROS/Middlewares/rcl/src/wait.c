@@ -522,6 +522,7 @@ rcl_ret_t
 rcl_wait(rcl_wait_set_t * wait_set, int64_t timeout)
 {
   RCL_CHECK_ARGUMENT_FOR_NULL(wait_set, RCL_RET_INVALID_ARGUMENT);
+  // STEP1: check wait_set
   if (!rcl_wait_set_is_valid(wait_set)) {
     RCL_SET_ERROR_MSG("wait set is invalid");
     return RCL_RET_WAIT_SET_INVALID;
@@ -537,7 +538,7 @@ rcl_wait(rcl_wait_set_t * wait_set, int64_t timeout)
     RCL_SET_ERROR_MSG("wait set is empty");
     return RCL_RET_WAIT_SET_EMPTY;
   }
-  // Calculate the timeout argument.
+  // STEP 2: Calculate the timeout argument.
   // By default, set the timer to block indefinitely if none of the below conditions are met.
   rmw_time_t * timeout_argument = NULL;
   rmw_time_t temporary_timeout_storage;
@@ -596,7 +597,7 @@ rcl_wait(rcl_wait_set_t * wait_set, int64_t timeout)
     timeout_argument = &temporary_timeout_storage;
   }
 
-  // Wait.
+  // STEP3: Wait.
   rmw_ret_t ret = rmw_wait(
     &wait_set->impl->rmw_subscriptions,
     &wait_set->impl->rmw_guard_conditions,
@@ -606,6 +607,7 @@ rcl_wait(rcl_wait_set_t * wait_set, int64_t timeout)
     wait_set->impl->rmw_wait_set,
     timeout_argument);
 
+  // STEP4: update waitset.
   // Items that are not ready will have been set to NULL by rmw_wait.
   // We now update our handles accordingly.
 

@@ -15,6 +15,7 @@
 #include <rmw_microros_internal/rmw_publisher.h>
 
 #include <rmw_microxrcedds_c/config.h>
+#include <rosidl_typesupport_microxrcedds_c/identifier.h>
 
 #ifdef RMW_UXRCE_GRAPH
 #include <rmw/get_topic_endpoint_info.h>
@@ -114,8 +115,10 @@ rmw_create_publisher(
 
     const rosidl_message_type_support_t * type_support_xrce = NULL;
 #ifdef ROSIDL_TYPESUPPORT_MICROXRCEDDS_C__IDENTIFIER_VALUE
+    /**
     type_support_xrce = get_message_typesupport_handle(
       type_support, ROSIDL_TYPESUPPORT_MICROXRCEDDS_C__IDENTIFIER_VALUE);
+    */
 #endif /* ifdef ROSIDL_TYPESUPPORT_MICROXRCEDDS_C__IDENTIFIER_VALUE */
 #ifdef ROSIDL_TYPESUPPORT_MICROXRCEDDS_CPP__IDENTIFIER_VALUE
     if (NULL == type_support_xrce) {
@@ -123,18 +126,20 @@ rmw_create_publisher(
         type_support, ROSIDL_TYPESUPPORT_MICROXRCEDDS_CPP__IDENTIFIER_VALUE);
     }
 #endif /* ifdef ROSIDL_TYPESUPPORT_MICROXRCEDDS_CPP__IDENTIFIER_VALUE */
+    /**
     if (NULL == type_support_xrce) {
       RMW_UROS_TRACE_MESSAGE("Undefined type support")
       goto fail;
-    }
+    }*/
 
+    /**
     custom_publisher->type_support_callbacks =
       (const message_type_support_callbacks_t *)type_support_xrce->data;
 
     if (custom_publisher->type_support_callbacks == NULL) {
       RMW_UROS_TRACE_MESSAGE("type support data is NULL")
       goto fail;
-    }
+    }*/
 
     // Create topic
     custom_publisher->topic = create_topic(
@@ -150,6 +155,14 @@ rmw_create_publisher(
     custom_publisher->publisher_id = uxr_object_id(
       custom_node->context->id_publisher++,
       UXR_PUBLISHER_ID);
+
+    /** MARK: TODO_List_srLiu
+     * 1. get a ring_buffer in ITEM and arrange it this publisher, after this, every message published by this publisher will be saved in this ring_buffer
+     * 2. register topic-specific pub_sub_relation_matrix, update this matrix so that when publishing message, ITEM can find which subscriber need this message.
+     * 3. link this `ring_buffer` and `pub_sub_relation_matrix` to this publisher, related info may be linked in`rmw_publisher_t` structure
+     * 4. following codes may not need any more. NOTE:TO-be-checked
+     */
+
     uint16_t publisher_req = UXR_INVALID_REQUEST_ID;
 
   #ifdef RMW_UXRCE_USE_REFS

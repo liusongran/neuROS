@@ -1,17 +1,3 @@
-// Copyright 2019 Proyectos y Sistemas de Mantenimiento SL (eProsima).
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 #include <limits.h>
 #include <math.h>
 
@@ -23,21 +9,30 @@
 
 rmw_ret_t
 rmw_wait(
-  rmw_subscriptions_t * subscriptions,
-  rmw_guard_conditions_t * guard_conditions,
-  rmw_services_t * services,
-  rmw_clients_t * clients,
-  rmw_events_t * events,
-  rmw_wait_set_t * wait_set,
-  const rmw_time_t * wait_timeout)
+  rmw_subscriptions_t     * subscriptions,
+  rmw_guard_conditions_t  * guard_conditions,
+  rmw_services_t          * services,
+  rmw_clients_t           * clients,
+  rmw_events_t            * events,
+  rmw_wait_set_t          * wait_set,
+  const rmw_time_t        * wait_timeout)
 {
   (void)events;
   (void)wait_set;
-
+  /** ||MARK: Workflow||
+   * 1. Clear run flag for all sessions
+   * 2. Check if there already has available data
+   *    - yes, skip timeout-step and return
+   *    - no, prepare going into timeout-step
+   * 3. Count sessions to be ran
+   * 4. wait timeout or data-ready
+   *    - alt1: yield CPU; delay for a while; check new-coming data
+   *    - alt2: current design
+   * 5. process new data
+   */
   // With `rmw_uxrce_wait_mutex` member `need_to_be_ran` is protected.
   // `session_memory` itself is not protected because it is not modified between
-  // rmw_init and rmw_shutdown, and rmw_wait cannot be called concurrently with
-  // those functions.
+  // rmw_init and rmw_shutdown, and rmw_wait cannot be called concurrently with those functions.
   UXR_LOCK(&rmw_uxrce_wait_mutex);
 
   if (!services && !clients && !subscriptions && !guard_conditions) {
@@ -45,7 +40,6 @@ rmw_wait(
     return RMW_RET_OK;
   }
 
-  // Check if timeout
   union {
     int64_t i64;
     int32_t i32;
@@ -60,13 +54,15 @@ rmw_wait(
 
   rmw_uxrce_clean_expired_static_input_buffer();
 
-  // Clear run flag for all sessions
+// STEP1: Clear run flag for all sessions
   rmw_uxrce_mempool_item_t * item = session_memory.allocateditems;
   while (item != NULL) {
     rmw_context_impl_t * custom_context = (rmw_context_impl_t *)item->data;
     custom_context->need_to_be_ran = false;
     item = item->next;
   }
+
+// STEP2: Check if there already has available data TODO:!!!
 
   // TODO(pablogs9): What happens if there already data in one entity?
   // Enable flag for every XRCE session available in the entities
@@ -86,7 +82,7 @@ rmw_wait(
     custom_subscription->owner_node->context->need_to_be_ran = true;
   }
 
-  // Count sessions to be ran
+// STEP3: Count sessions to be ran
   uint8_t available_contexts = 0;
   item = session_memory.allocateditems;
   while (item != NULL) {
@@ -95,7 +91,7 @@ rmw_wait(
     item = item->next;
   }
 
-  // There is no context that contais any of the wait set entities. Nothing to wait here.
+// STEP4: There is no context that contains any of the wait set entities. Nothing to wait here.
   if (available_contexts != 0) {
     int32_t per_session_timeout =
       (timeout.i32 == UXR_TIMEOUT_INF) ? UXR_TIMEOUT_INF :
@@ -105,7 +101,8 @@ rmw_wait(
     while (item != NULL) {
       rmw_context_impl_t * custom_context = (rmw_context_impl_t *)item->data;
       if (custom_context->need_to_be_ran) {
-        uxr_run_session_until_data(&custom_context->session, per_session_timeout);
+        //uxr_run_session_until_data(&custom_context->session, per_session_timeout);
+        comm_itam_run_session_until_data(&custom_context->session, per_session_timeout);
       }
       item = item->next;
     }
@@ -114,7 +111,8 @@ rmw_wait(
     item = session_memory.allocateditems;
     while (item != NULL) {
       rmw_context_impl_t * custom_context = (rmw_context_impl_t *)item->data;
-      uxr_run_session_timeout(&custom_context->session, 0);
+      //uxr_run_session_timeout(&custom_context->session, 0);
+      comm_itam_run_session_timeout(&custom_context->session, 0);
       item = item->next;
     }
   }
@@ -123,6 +121,7 @@ rmw_wait(
 
   bool buffered_status = false;
 
+// STEP5: process new data
   // Check services
   for (size_t i = 0; services && i < services->service_count; ++i) {
     rmw_uxrce_service_t * custom_service = (rmw_uxrce_service_t *)services->services[i];

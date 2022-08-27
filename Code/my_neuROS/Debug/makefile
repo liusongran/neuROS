@@ -32,7 +32,6 @@ RM := rm -rf
 -include Middlewares/eProsima/Micro-XRCE-DDS-Client/src/c/core/log/subdir.mk
 -include Middlewares/eProsima/Micro-CDR/src/c/types/subdir.mk
 -include Middlewares/eProsima/Micro-CDR/src/c/subdir.mk
--include Middlewares/comm/itam/subdir.mk
 -include Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/subdir.mk
 -include Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/subdir.mk
 -include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/subdir.mk

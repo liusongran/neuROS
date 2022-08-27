@@ -57,6 +57,13 @@ rmw_publish(
       custom_publisher->cs_cb_size(&topic_length);
     }
 
+    /** MARK: TODO_List_srLiu
+     * 1. put the message this publisher's ring_buffer
+     * 2. copy this message into its subscribers' ring_buffer
+     * 3. send the signal, update corresponding flag in wait_set(..)
+     * 4. following codes may not need any more. NOTE:TO-be-checked
+     */
+
     ucdrBuffer mb;
     bool written = false;
     if (uxr_prepare_output_stream(

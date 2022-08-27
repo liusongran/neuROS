@@ -275,6 +275,7 @@ rcl_node_init(
   RCL_CHECK_FOR_NULL_WITH_MSG(
     rmw_graph_guard_condition, rmw_get_error_string().str, goto fail);
 
+  /*For test, by srliu.
   node->impl->graph_guard_condition = (rcl_guard_condition_t *)allocator->allocate(
     sizeof(rcl_guard_condition_t), allocator->state);
   RCL_CHECK_FOR_NULL_WITH_MSG(
@@ -287,7 +288,7 @@ rcl_node_init(
     node->impl->graph_guard_condition,
     rmw_graph_guard_condition,
     context,
-    graph_guard_condition_options);
+    graph_guard_condition_options);*/
   if (ret != RCL_RET_OK) {
     // error message already set
     goto fail;
