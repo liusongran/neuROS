@@ -24,7 +24,7 @@ Prototype Real-time Operating System for [UPDATE]() based on [micro-ROS project]
 
 ## Design of neuROS
 ### A. Overview
-<img src="./Image/overview.pdf" alt="overview" style="zoom:87%;" />
+<img src="./Image/overview.jpg" alt="overview" style="zoom:87%;" />
 
 #### 1. `Executor Task` - (the highest priority)
 A `Executor Task` is responsible for **collecting the ready callbacks** periodically and **dispatching callbacks** to other `Slaver Task`s. So those functionalities should be designed in detail:
@@ -46,16 +46,16 @@ Each `Slaver Task` has a `Dual-buffer`, which is responsible for recording the d
 @para2: Result comparison with some figures. 
 
 ### B. Design of `Executor Task`
-<img src="./Image/executor_task.pdf" alt="overview" style="zoom:87%;" />
+<img src="./Image/executor_task.jpg" alt="overview" style="zoom:57%;" />
 
 - **$Wait\_set$ update strategy**: Active $Wait\_set$ update is the same with micro-ROS.
 - **Callback dispatching policy**: Simply put callbacks into different slaver tasks with different priority.
 
 ### C. Design of `Slaver Task`
-<img src="./Image/slaver_task.pdf" alt="overview" style="zoom:87%;" />
+<img src="./Image/slaver_task.jpg" alt="overview" style="zoom:87%;" />
 
 ### D. Design of `Dual-buffer`
-<img src="./Image/dual_buffer.pdf" alt="overview" style="zoom:87%;" />
+<img src="./Image/dual_buffer.jpg" alt="overview" style="zoom:87%;" />
 > `Timer buffer`: high priority -> check first
 `Subscriber buffer`: low priority
 
