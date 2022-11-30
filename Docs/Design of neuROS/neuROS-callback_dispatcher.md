@@ -1,8 +1,63 @@
-## callback dispatcher design in neuROS
-> Maintained by Wang Zilong
+## Callback Dispatcher in neuROS
+> Maintained by **Wang Zilong** and **Liu Songran**
 
+### I. Background
 
-### 设计思路
+<img src="/Users/liusongran/Library/Application Support/typora-user-images/image-20221013111156844.png" alt="image-20221013111156844" style="zoom:43%;" />
+
+<img src="/Users/liusongran/Library/Application Support/typora-user-images/image-20221013140057383.png" alt="image-20221013140057383" style="zoom:33%;" />
+
+##### a. callback management in Micro-ROS
+
+<img src="/Users/liusongran/Library/Application Support/typora-user-images/image-20221013114453979.png" alt="image-20221013114453979" style="zoom:50%;" />
+
+1. `Wait()`
+
+2. Update `wait_set`
+
+   > **Trigger condition:**
+   >
+   > - Given a set of handles, a trigger condition, which is based on the availability of input data of these handles, decides when the processing of all callbacks starts. 
+   >
+   >   <img src="https://micro.ros.org/docs/concepts/client_library/execution_management/png/trigger_01.png" alt="Trigger condition overview" style="zoom:53%;" />
+   >
+   > - Available options:
+   >
+   >   - ALL operation: fires when input data is available for all handles
+   >   - ANY operation: fires when input data is available for at least one handle (OR semantics)
+   >   - ONE: fires when input data for a user-specified handle is available
+   >   - User-defined function: user can implement custom logic
+
+3. execute ready callbacks
+
+##### b. Rules
+
+1. 依据timer > sub > service..轮询
+2. 只标识0/1，不标识iteration
+3. batch-based update
+
+### II. Design principles
+
+> **TO DISCUSS:**
+
+### III. Current design
+
+<img src="/Users/liusongran/Library/Application Support/typora-user-images/image-20221013135323269.png" alt="image-20221013135323269" style="zoom:50%;" />
+
+> **TO DISCUSS:**
+>
+> 1. dispatcher按照什么策略分配？优先级or响应时间最快等等..
+> 2. 哪些类型的callback分配给那些slaver，static/dynamic configure?
+> 3. 现在是master-slaver设计 VS ROS2 multi-threaded executor design
+
+> TO CHECK:
+>
+> 1. cyberRT queue management
+
+### IV. Current Implementation
+
+##### a. 设计思路
+
 + 先定义subscription和timer结构体。
 ```C
 typedef struct{
@@ -167,7 +222,7 @@ void StartDefaultTask(void *argument) {
 	vTaskDelete(defaultTaskHandle);//删除开始任务
 }
 ```
-### 运行结果
+##### b. 运行结果
 将task1和task2的优先级设置为相同。
 ```C
 #define maxsize           10
@@ -186,7 +241,7 @@ TaskHandle_t Task2Task_Handler;
 + 当使用互斥信号量时，运行结果为：   
 ![](https://img8.uploadhouse.com/fileuploads/29501/29501528bd2487a260be138ab1da6058dbe91024.png)   
 可见互斥信号量起到作用，不同task内被互斥信号量保护的代码可互斥访问。
-### 额外思考
+##### c. 额外思考
 + 最初设想是将rcl_executor_t内的subscription_handles和timer_handles设置为指针数组形式，这样可以更加节省空间，然而写完代码之后发现，使用指针数组的本质是动态分配地址空间，在一个函数内定义完一个rclc_executor_handle_t后，使对应的指针指向该内容，然而在这个函数返回后，该内容会被释放掉，此时指向该内容的指针就会不知所措，虽然程序不会报错，但不会得到预期的结果，所以最终还是选择静态分配地址空间的方式，如果找到在不同task之间传递信息的方法，可以继续尝试动态分配地址空间的方式。
 + 根据micro-ROS，最开始想要设计一套从DDS中间件接收信息的机制。
 ```C
@@ -243,5 +298,5 @@ bool take_new_data(rclc_executor_handle_t *handle,rcl_wait_set_t *wait_set){
 }
 ```
 工程太过巨大，而且对wait_set的功能理解不够，只好做减法，日后对micro-ROS的代码有一定理解后可继续尝试。
-### 未来方向
+##### d. 未来方向
 主要修改executor.c文件中的_rclc_execute()等函数，根据所建立的task个数将本程序嵌入到micro-ROS中去。
