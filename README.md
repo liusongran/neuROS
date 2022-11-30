@@ -56,8 +56,9 @@ Each `Slaver Task` has a `Dual-buffer`, which is responsible for recording the d
 
 ### D. Design of `Dual-buffer`
 <img src="./Image/dual_buffer.jpg" alt="overview" style="zoom:87%;" />
+
 > **Timer buffer**: high priority -> check first
-> **Subscriber buffer**: low priority
+**Subscriber buffer**: low priority
 
 > **Limitation of Current Implementation:** priority in each callback class is not supported. So for each buffer, enqueue and dequeue are both FIFO.
 
