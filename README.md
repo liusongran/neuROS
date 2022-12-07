@@ -43,7 +43,8 @@ Each `Slaver Task` has a `Dual-buffer`, which is responsible for recording the d
 ![](https://img4.uploadhouse.com/fileuploads/29647/29647264f0e890c2ae4199c75a164e2e6af574df.png)  
 + 一共两个SlaverTask，设置Task2的优先级高于Task1，Task1处理优先级不高于10的callback，Task2处理优先级不低于10的callback。
 + 利用FreeRTOS的队列机制，一个SlaverTask对应一个Dual-buffer，Dual-buffer中包含两个队列，一个队列存储Timer_callback，一个队列存储Subscription_callback，SlaverTask的每次循环，先看timer_queue是否为空，再看subscription_queue是否为空，如果两个队列都为空，则将自身挂起，ExecutorTask每次分发任务时会对SlaverTask进行判断，如果SlaverTask为挂起态，ExecutorTask会将SlaverTask设置为执行态。
-+ 运行结果如下： 
++ 将任务链一的定时器周期设置为5000ms，任务链二的定时器周期设置为2000ms，运行结果如下： 
+![](https://img9.uploadhouse.com/fileuploads/29647/296472696b17f47df03ef863305157ded516a00e.png)   
 
 ### B. Design of `Executor Task`
 <img src="./Image/executor_task.jpg" alt="overview" style="zoom:57%;" />
@@ -63,7 +64,12 @@ Each `Slaver Task` has a `Dual-buffer`, which is responsible for recording the d
 > **Limitation of Current Implementation:** priority in each callback class is not supported. So for each buffer, enqueue and dequeue are both FIFO.
 
 ### E. Design of `Ring buffer` for each publisher/subscriber
-> Zilong: add contents here.
+![](https://img1.uploadhouse.com/fileuploads/29647/296472715c25fddd2f488cc9258bee6af409d51c.png)
++ 每个publisher或subscription拥有一个专属ring_buffer；
++ 创建的publisher或subscription依据topic_name连接在一起；
++ publisher发布消息时，将消息加入到对应的subscription的ring_buffer中；
++ 一个publisher可同时向多个subscription发布消息。
+
 
 ## Implementation of neuROS
 TODO
