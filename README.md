@@ -39,11 +39,11 @@ A `Slaver Task` is used to fetch ready callback from `Dual-buffer` with respect 
 Each `Slaver Task` has a `Dual-buffer`, which is responsible for recording the dispatched callbacks to this `Slaver Task`. Specifically, a `Dual-buffer` consists of two FIFO buffers, one for Timer callbacks and the other for Subscription callbacks.
 
 #### 4. An Example
-> zilong: use the chain example to explain
-
-@para1: Explain the example first, code can be found [here]().
-
-@para2: Result comparison with some figures. 
+1. 设置两条任务链，每条任务链包含一个Timer和两个Subscription，手动为Timer或Subscription对应的callback绑定优先级，设置任务链一内callback的优先级不高于10，任务链二内callback的优先级不低于10，示意图如下：
+<img src="[https://img4.uploadhouse.com/fileuploads/29647/29647264f0e890c2ae4199c75a164e2e6af574df.png]" / >
+2. 一共两个SlaverTask，设置Task2的优先级高于Task1，Task1处理优先级不高于10的callback，Task2处理优先级不低于10的callback。
+3. 利用FreeRTOS的队列机制，一个SlaverTask对应一个Dual-buffer，Dual-buffer中包含两个队列，一个队列存储Timer_callback，一个队列存储Subscription_callback，SlaverTask的每次循环，先看timer_queue是否为空，再看subscription_queue是否为空，如果两个队列都为空，则将自身挂起，ExecutorTask每次分发任务时会对SlaverTask进行判断，如果SlaverTask为挂起态，ExecutorTask会将SlaverTask设置为执行态。
+4. 运行结果如下： 
 
 ### B. Design of `Executor Task`
 <img src="./Image/executor_task.jpg" alt="overview" style="zoom:57%;" />
