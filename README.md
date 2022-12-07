@@ -67,7 +67,7 @@ Each `Slaver Task` has a `Dual-buffer`, which is responsible for recording the d
 ![](https://img1.uploadhouse.com/fileuploads/29647/296472715c25fddd2f488cc9258bee6af409d51c.png)
 + 每个publisher或subscription拥有一个专属ring_buffer；
 + 创建的publisher或subscription依据topic_name连接在一起；
-+ publisher发布消息时，将消息加入到对应的subscription的ring_buffer中；
++ publisher发布消息时，将消息发送到自己的ring_buffer中，根据注册表将消息复制到对应的所有subscription的ring_buffer中；
 + 一个publisher可同时向多个subscription发布消息。
 
 
